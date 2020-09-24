@@ -44,7 +44,7 @@ func main() {
 		t := time.Unix(r.Timestamp, 0)
 		log.Printf("Time: %d, %s", r.Timestamp, t.String())
 
-	// default:
-	// 	log.Fatalf("invalid command: %v", cmd)
+	default:
+		log.Fatalf("invalid command: %v", cmd)
 	}
 }
