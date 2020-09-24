@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "github.com/budadcabrion/go-practice/service";
+
+package service;
+
+service Service {
+  rpc Time (TimeRequest) returns (TimeReply) {}
+}
+
+message TimeRequest {
+}
+
+message TimeReply {
+  int64 timestamp = 1; 
+}
