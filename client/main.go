@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 	"os"
+	"strconv"
+	"io"
 
 	"github.com/budadcabrion/go-practice/service"
 
@@ -43,6 +45,46 @@ func main() {
 		}
 		t := time.Unix(r.Timestamp, 0)
 		log.Printf("Time: %d, %s", r.Timestamp, t.String())
+
+	case "insert":
+		if len(os.Args) < 4 {
+			log.Fatalf("not enough args for insert, need 2")
+		}
+		name := os.Args[2]
+		thingType := os.Args[3]
+		r, err := client.InsertThing(ctx, &service.Thing{Name: name, Type: thingType})
+		if err != nil {
+			log.Fatalf("could not insert thing: %v", err)
+		}
+		log.Printf("Id: %d", r.Id)
+
+	case "get":
+		if len(os.Args) < 3 {
+			log.Fatalf("not enough args for insert, need 2")
+		}
+		id, _ := strconv.Atoi(os.Args[2])
+		r, err := client.GetThing(ctx, &service.ThingId{Id: int64(id)})
+		if err != nil {
+			log.Fatalf("could not get thing: %v", err)
+		}
+		log.Printf("Thing: %v", r)
+
+	case "list":
+		stream, err := client.ListThings(ctx, &service.ListThingsRequest{})
+		if err != nil {
+			log.Fatalf("could not list things: %v", err)
+		}
+
+		for {
+			thing, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("could not recv thing: %v", err)
+			}
+			log.Printf("Thing: %v", thing)
+		}
 
 	default:
 		log.Fatalf("invalid command: %v", cmd)
