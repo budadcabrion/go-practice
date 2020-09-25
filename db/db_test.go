@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	InitDB()
+	InitDB("test", true)
 
 	t1 := Thing{0, "Toaster", "Appliance"}
 	t2 := Thing{0, "Toe", "Appendage"}

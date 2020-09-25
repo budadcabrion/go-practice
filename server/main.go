@@ -51,7 +51,7 @@ func (s *serviceServer) ListThings(req *service.ListThingsRequest, stream servic
 
 func main() {
 	log.Printf("Starting DB")
-	db.InitDB()
+	db.InitDB("db", false)
 	log.Printf("Starting server")
 
 	listener, err := net.Listen("tcp", port)

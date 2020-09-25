@@ -8,14 +8,16 @@ import (
 
 var db *sql.DB
 
-func InitDB() {
-	db, _ = sql.Open("sqlite3", "./bogo.db")
+func InitDB(name string, delete bool) {
+	db, _ = sql.Open("sqlite3", "./" + name + ".db")
 
-	statement, _ := db.Prepare("DROP TABLE IF EXISTS thing")
-	statement.Exec()
+	if delete {
+		statement, _ := db.Prepare("DROP TABLE IF EXISTS thing")
+		statement.Exec()
+	}
 
 	var err error
-	statement, err = db.Prepare("CREATE TABLE thing (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), type VARCHAR(200))")
+	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS thing (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), type VARCHAR(200))")
 	if err != nil {
 		log.Fatalf("CREATE TABLE thing Prepare: %v", err)
 	}

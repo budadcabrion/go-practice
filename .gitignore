@@ -1,3 +1,4 @@
 bogo.db
 go.sum
 .idea
+*.db
